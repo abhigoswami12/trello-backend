@@ -3,7 +3,7 @@ var userService = require("../src/user/userService");
 // var authService = require("../src/auth/authService");
 
 var userController = {
-  createUser: async function(req, res, next) {
+  createUser: async function (req, res, next) {
     console.log(req.body.user, "userrrr");
     var { name, email, password } = req.body.user;
     if (!name || !email || !password) {
@@ -25,7 +25,7 @@ var userController = {
       if (userWithEmail) {
         return res
           .status(400)
-          .send({ message: "Email already exists.Please try other email" });
+          .send({ message: "email already exists.Please try other email" });
       }
 
       var newUser = await userService.createUser(req.body.user);
@@ -35,7 +35,7 @@ var userController = {
     }
   },
 
-  listUsers: async function(req, res, next) {
+  listUsers: async function (req, res, next) {
     try {
       var users = await userService.listUsers();
       return res.send({ users });
@@ -44,7 +44,7 @@ var userController = {
     }
   },
 
-  showUser: async function(req, res, next) {
+  showUser: async function (req, res, next) {
     var userId = req.params.userId;
     try {
       var user = await userService.showUser(userId);
@@ -54,7 +54,7 @@ var userController = {
     }
   },
 
-  updateUser: async function(req, res, next) {
+  updateUser: async function (req, res, next) {
     var userId = req.params.userId;
     var user = req.body.user;
     console.log(userId);
@@ -67,7 +67,7 @@ var userController = {
     }
   },
 
-  deleteUser: async function(req, res, next) {
+  deleteUser: async function (req, res, next) {
     var userId = req.params.userId;
     try {
       var deletedUser = await userService.deleteUser(userId);
@@ -75,7 +75,25 @@ var userController = {
     } catch (error) {
       return error;
     }
-  }
+  },
+
+  showMe: async function (req, res, next) {
+    // console.log(req.user, "user in show Me");
+    var userId = req.user._id;
+    try {
+      var user = await userService.showUser(userId);
+      return res.send({ user });
+    } catch (error) {
+      return error;
+    }
+  },
+
+  logout: function (req, res, next) {
+    console.log("enetered");
+    // console.log(res, "RESPONSE");
+    res.clearCookie("token");
+    res.send({ message: "Logged out" });
+  },
 };
 
 function generateUserFormat(user, token) {
@@ -86,7 +104,7 @@ function generateUserFormat(user, token) {
     bio: user.bio,
     image: user.photoUrl,
     teams: user.teams,
-    id: user._id
+    id: user._id,
   };
 }
 

@@ -9,7 +9,7 @@ require("dotenv").config();
 mongoose.connect(
   "mongodb://localhost/trello",
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
-  err => {
+  (err) => {
     console.log("connected", err ? err : true);
   }
 );
@@ -22,6 +22,7 @@ var cardsRouter = require("./routes/cards");
 var labelsRouter = require("./routes/labels");
 var listsRouter = require("./routes/lists");
 var commentsRouter = require("./routes/comments");
+var userRouter = require("./routes/user");
 
 var app = express();
 
@@ -39,5 +40,6 @@ app.use("/api/v1/cards", cardsRouter);
 app.use("/api/v1/comments", commentsRouter);
 app.use("/api/v1/lists", listsRouter);
 app.use("/api/v1/labels", labelsRouter);
+app.use("/api/v1/user", userRouter);
 
 module.exports = app;

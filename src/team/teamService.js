@@ -1,7 +1,7 @@
 var Team = require("../../models/Team");
 
 var TeamService = {
-  createTeam: async function(team) {
+  createTeam: async function (team) {
     try {
       var team = await Team.create(team);
       return team;
@@ -10,16 +10,16 @@ var TeamService = {
     }
   },
 
-  listTeams: async function() {
+  listTeams: async function () {
     try {
-      var teams = await Team.find({});
+      var teams = await Team.find({}).populate("boards").exec();
       return teams;
     } catch (error) {
       return error;
     }
   },
 
-  showTeam: async function(teamId) {
+  showTeam: async function (teamId) {
     try {
       var team = await Team.findById(teamId);
       return team;
@@ -28,7 +28,7 @@ var TeamService = {
     }
   },
 
-  updateTeam: async function(teamId, team) {
+  updateTeam: async function (teamId, team) {
     try {
       var team = Team.findByIdAndUpdate(teamId, team, { new: true });
       return team;
@@ -37,14 +37,27 @@ var TeamService = {
     }
   },
 
-  deleteTeam: async function(teamId) {
+  deleteTeam: async function (teamId) {
     try {
       var team = Team.findByIdAndRemove(teamId);
       return team;
     } catch (error) {
       return error;
     }
-  }
+  },
+  updateTeamBoards: async function (board) {
+    try {
+      // console.log(board, "BOARD IN TEAM SERVICE");
+      var team = Team.findOneAndUpdate(
+        { _id: board.teamId },
+        { $push: { boards: board._id } }
+      );
+      // console.log(team);
+      return team;
+    } catch (error) {
+      return error;
+    }
+  },
 };
 
 module.exports = TeamService;

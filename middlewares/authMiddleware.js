@@ -2,7 +2,8 @@ var jwt = require("jsonwebtoken");
 var userService = require("../src/user/userService");
 
 var authMiddleware = {
-  identifyUser: async function(req, res, next) {
+  identifyUser: async function (req, res, next) {
+    console.log("entered middleware");
     var token = req.cookies.token;
     if (token) {
       try {
@@ -16,6 +17,6 @@ var authMiddleware = {
     } else {
       return res.status(400).send({ message: "Token Required" });
     }
-  }
+  },
 };
 module.exports = authMiddleware;

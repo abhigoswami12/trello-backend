@@ -1,7 +1,8 @@
+const { findByIdAndUpdate, findOneAndUpdate } = require("../../models/List");
 var List = require("../../models/List");
 
 var ListService = {
-  createList: async function(list) {
+  createList: async function (list) {
     try {
       var list = await List.create(list);
       return list;
@@ -10,7 +11,7 @@ var ListService = {
     }
   },
 
-  listLists: async function() {
+  listLists: async function () {
     try {
       var lists = await List.find({});
       return lists;
@@ -19,16 +20,16 @@ var ListService = {
     }
   },
 
-  showList: async function(listId) {
+  showList: async function (listId) {
     try {
-      var list = await List.findById(listId);
+      var list = await List.findById(listId).populate("cards");
       return list;
     } catch (error) {
       return error;
     }
   },
 
-  updateList: async function(listId, list) {
+  updateList: async function (listId, list) {
     try {
       var list = List.findByIdAndUpdate(listId, list, { new: true });
       return list;
@@ -37,14 +38,25 @@ var ListService = {
     }
   },
 
-  deleteList: async function(listId) {
+  deleteList: async function (listId) {
     try {
       var list = List.findByIdAndRemove(listId);
       return list;
     } catch (error) {
       return error;
     }
-  }
+  },
+  updateListCards: async function (card) {
+    try {
+      var list = await List.findOneAndUpdate(
+        { _id: card.listId },
+        { $push: { cards: card._id } }
+      );
+      return list;
+    } catch (error) {
+      return error;
+    }
+  },
 };
 
 module.exports = ListService;

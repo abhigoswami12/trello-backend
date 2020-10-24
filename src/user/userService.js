@@ -1,7 +1,7 @@
 var User = require("../../models/User");
 
 var UserService = {
-  createUser: async function(user) {
+  createUser: async function (user) {
     try {
       var user = await User.create(user);
       console.log(user);
@@ -11,7 +11,7 @@ var UserService = {
     }
   },
 
-  listUsers: async function() {
+  listUsers: async function () {
     try {
       var users = await User.find({});
       return users;
@@ -20,7 +20,7 @@ var UserService = {
     }
   },
 
-  showUser: async function(userId) {
+  showUser: async function (userId) {
     try {
       var user = await User.findById(userId);
       return user;
@@ -29,17 +29,17 @@ var UserService = {
     }
   },
 
-  showUserByField: async function(filterObj) {
+  showUserByField: async function (filterObj) {
     try {
       var user = await User.findOne(filterObj);
-      console.log(user, "USER");
+      console.log(user, "USER found in userService");
       return user;
     } catch (error) {
       return error;
     }
   },
 
-  updateUser: async function(userId, user) {
+  updateUser: async function (userId, user) {
     try {
       var user = User.findByIdAndUpdate(userId, user, { new: true });
       return user;
@@ -48,14 +48,33 @@ var UserService = {
     }
   },
 
-  deleteUser: async function(userId) {
+  deleteUser: async function (userId) {
     try {
       var user = User.findByIdAndRemove(userId);
       return user;
     } catch (error) {
       return error;
     }
-  }
+  },
+
+  updateUserTeamsArr: async function (team) {
+    try {
+      var user = User.findOneAndUpdate(
+        { _id: team.adminId },
+        { $push: { teams: team._id } }
+      );
+      return user;
+    } catch (error) {
+      return error;
+    }
+  },
+  // logoutUser: async function() {
+  //   try {
+  //     res
+  //   } catch (error) {
+
+  //   }
+  // }
 };
 
 module.exports = UserService;

@@ -1,22 +1,22 @@
 var listService = require("../src/list/listService");
+var boardService = require("../src/board/boardService");
 
 var listController = {
-  createList: async function(req, res, next) {
+  createList: async function (req, res, next) {
     var list = req.body.list;
-    if (!list.name || !list.email || !list.password) {
-      return res
-        .status(400)
-        .send({ message: "name, email and password are required." });
+    if (!list.name) {
+      return res.status(400).send({ message: "name is required." });
     }
     try {
       var newList = await listService.createList(list);
+      var updatedBoard = await boardService.updateBoardLists(newList);
       return res.send({ list: newList });
     } catch (error) {
       next(error);
     }
   },
 
-  listLists: async function(req, res, next) {
+  listLists: async function (req, res, next) {
     try {
       var lists = await listService.listLists();
       return res.send({ lists });
@@ -25,7 +25,7 @@ var listController = {
     }
   },
 
-  showList: async function(req, res, next) {
+  showList: async function (req, res, next) {
     var listId = req.params.listId;
     try {
       var list = await listService.showList(listId);
@@ -35,7 +35,7 @@ var listController = {
     }
   },
 
-  updateList: async function(req, res, next) {
+  updateList: async function (req, res, next) {
     var listId = req.params.listId;
     var list = req.body.list;
     console.log(listId);
@@ -48,7 +48,7 @@ var listController = {
     }
   },
 
-  deleteList: async function(req, res, next) {
+  deleteList: async function (req, res, next) {
     var listId = req.params.listId;
     try {
       var deletedList = await listService.deleteList(listId);
@@ -56,7 +56,7 @@ var listController = {
     } catch (error) {
       return error;
     }
-  }
+  },
 };
 
 module.exports = listController;
