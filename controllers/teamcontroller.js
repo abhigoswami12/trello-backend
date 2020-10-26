@@ -1,5 +1,7 @@
+const { deleteBoardsFromTeam } = require("../src/board/boardService");
 var teamService = require("../src/team/teamService");
 var userService = require("../src/user/userService");
+var boardService = require("../src/board/boardService");
 
 var teamController = {
   createTeam: async function (req, res, next) {
@@ -55,9 +57,24 @@ var teamController = {
 
   deleteTeam: async function (req, res, next) {
     var teamId = req.params.teamId;
+
+    console.log("entered teamcontroller with Id", teamId);
+
+    console.log(req.user);
     try {
-      var deletedTeam = await teamService.deleteTeam(teamId);
-      return res.send({ message: "Team successfully deleted" });
+      var team = await teamService.showTeam(teamId);
+
+      if (team.adminId.toString() === req.user._id.toString()) {
+        console.log("Entered after true");
+        await teamService.deleteTeam(team);
+        await userService.deleteTeamIdFromUserTeamsArr(team);
+        await boardService.deleteBoardsFromTeam(team);
+        return res.send({ message: "team deleted successfully" });
+      } else {
+        return res
+          .status(400)
+          .send({ message: "you must be the owner of the team to delete it" });
+      }
     } catch (error) {
       return error;
     }

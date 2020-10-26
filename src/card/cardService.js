@@ -3,6 +3,7 @@ var Card = require("../../models/Card");
 var CardService = {
   createCard: async function (card) {
     try {
+      console.log(card, "in CardService");
       var card = await Card.create(card);
       return card;
     } catch (error) {
@@ -44,6 +45,13 @@ var CardService = {
     try {
       var card = Card.findByIdAndRemove(cardId);
       return card;
+    } catch (error) {
+      return error;
+    }
+  },
+  removeCardsFromBoard: async function (board) {
+    try {
+      return await Card.deleteMany({ boardId: board._id });
     } catch (error) {
       return error;
     }

@@ -1,3 +1,4 @@
+const Board = require("../../models/Board");
 const { findByIdAndUpdate, findOneAndUpdate } = require("../../models/List");
 var List = require("../../models/List");
 
@@ -53,6 +54,13 @@ var ListService = {
         { $push: { cards: card._id } }
       );
       return list;
+    } catch (error) {
+      return error;
+    }
+  },
+  deleteListsFromBoard: async function (board) {
+    try {
+      return await List.deleteMany({ boardId: board._id });
     } catch (error) {
       return error;
     }

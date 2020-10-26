@@ -52,10 +52,9 @@ var BoardService = {
     }
   },
 
-  deleteBoard: async function (boardId) {
+  deleteBoard: async function (board) {
     try {
-      var board = Board.findByIdAndRemove(boardId);
-      return board;
+      return await board.remove();
     } catch (error) {
       return error;
     }
@@ -67,6 +66,14 @@ var BoardService = {
         { $push: { lists: list._id } }
       );
       return board;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  deleteBoardsFromTeam: async function (team) {
+    try {
+      return await Board.deleteMany({ teamId: team._id });
     } catch (error) {
       return error;
     }

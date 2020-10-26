@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 var boardSchema = Schema(
   {
     name: { type: String, required: true },
+    boardOwner: { type: Schema.Types.ObjectId, ref: "User" },
     teamId: { type: Schema.Types.ObjectId, ref: "Team" },
     lists: [{ type: Schema.Types.ObjectId, ref: "List" }],
   },

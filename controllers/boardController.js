@@ -1,10 +1,13 @@
 var boardService = require("../src/board/boardService");
 var teamService = require("../src/team/teamService");
+var listService = require("../src/list/listService");
+var cardService = require("../src/card/cardService");
 
 var boardController = {
   createBoard: async function (req, res, next) {
     var board = req.body.board;
     var teamId = req.body.board.teamId;
+    board.boardOwner = req.user._id;
     // console.log(board);
     if (!board.name) {
       return res.status(400).send({ message: "name is required." });
@@ -52,10 +55,23 @@ var boardController = {
   },
 
   deleteBoard: async function (req, res, next) {
+    console.log("entered delete board");
     var boardId = req.params.boardId;
     try {
-      var deletedBoard = await boardService.deleteBoard(boardId);
+      var board = await boardService.showBoard(boardId);
+      console.log(board.boardOwner);
+      console.log(req.user._id);
+      // if (board.boardOwner.toString() === req.user._id.toString()) {
+      await boardService.deleteBoard(board);
+      await listService.deleteListsFromBoard(board);
+      await teamService.removeBoardIdFromBoardsArr(board);
+      await cardService.removeCardsFromBoard(board);
       return res.send({ message: "Board successfully deleted" });
+      // } else {
+      //   return res
+      //     .status(400)
+      //     .send({ message: "you must be the owner of the board to delete it" });
+      // }
     } catch (error) {
       return error;
     }

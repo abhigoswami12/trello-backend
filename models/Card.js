@@ -9,6 +9,7 @@ var cardSchema = Schema(
     date: { type: Date },
     members: [{ type: Schema.Types.ObjectId, ref: "User" }],
     listId: { type: Schema.Types.ObjectId, ref: "List" },
+    boardId: { type: Schema.Types.ObjectId, ref: "Board" },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     labels: [{ type: Schema.Types.ObjectId, ref: "Label" }],
   },

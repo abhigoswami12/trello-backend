@@ -10,6 +10,10 @@ router.get("/", listController.listLists);
 router.post("/", authMiddleware.identifyUser, listController.createList);
 router.put("/:listId", listController.updateList);
 
-router.delete("/:listId", listController.deleteList);
+router.delete(
+  "/:listId",
+  authMiddleware.identifyUser,
+  listController.deleteList
+);
 
 module.exports = router;

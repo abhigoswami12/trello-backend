@@ -37,10 +37,9 @@ var TeamService = {
     }
   },
 
-  deleteTeam: async function (teamId) {
+  deleteTeam: async function (team) {
     try {
-      var team = Team.findByIdAndRemove(teamId);
-      return team;
+      return await team.remove();
     } catch (error) {
       return error;
     }
@@ -53,6 +52,17 @@ var TeamService = {
         { $push: { boards: board._id } }
       );
       // console.log(team);
+      return team;
+    } catch (error) {
+      return error;
+    }
+  },
+  removeBoardIdFromBoardsArr: async function (board) {
+    try {
+      var team = await Team.findOneAndUpdate(
+        { _id: board.teamId },
+        { $pull: { boards: board._id } }
+      );
       return team;
     } catch (error) {
       return error;

@@ -41,7 +41,7 @@ var UserService = {
 
   updateUser: async function (userId, user) {
     try {
-      var user = User.findByIdAndUpdate(userId, user, { new: true });
+      var user = await User.findByIdAndUpdate(userId, user, { new: true });
       return user;
     } catch (error) {
       return error;
@@ -50,7 +50,7 @@ var UserService = {
 
   deleteUser: async function (userId) {
     try {
-      var user = User.findByIdAndRemove(userId);
+      var user = await User.findByIdAndRemove(userId);
       return user;
     } catch (error) {
       return error;
@@ -59,7 +59,7 @@ var UserService = {
 
   updateUserTeamsArr: async function (team) {
     try {
-      var user = User.findOneAndUpdate(
+      var user = await User.findOneAndUpdate(
         { _id: team.adminId },
         { $push: { teams: team._id } }
       );
@@ -67,6 +67,20 @@ var UserService = {
     } catch (error) {
       return error;
     }
+  },
+
+  deleteTeamIdFromUserTeamsArr: async function (team) {
+    try {
+      var user = await User.findOneAndUpdate(
+        { _id: team.adminId },
+        { $pull: { teams: team._id } }
+      );
+      return user;
+    } catch (error) {
+      return error;
+    }
+
+    return user;
   },
   // logoutUser: async function() {
   //   try {

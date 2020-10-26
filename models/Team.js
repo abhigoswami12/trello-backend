@@ -9,7 +9,7 @@ var teamSchema = Schema(
     description: { type: String }, //not necessary
     adminId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     members: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    boards: [{ type: Schema.Types.ObjectId, ref: "Board" }]
+    boards: [{ type: Schema.Types.ObjectId, ref: "Board" }],
   },
   { timestamps: true }
 );
