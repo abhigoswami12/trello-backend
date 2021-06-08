@@ -7,7 +7,7 @@ var mongoose = require("mongoose");
 require("dotenv").config();
 
 mongoose.connect(
-  "mongodb://localhost/trello",
+  process.env.MONGO_DB,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
   (err) => {
     console.log("connected", err ? err : true);
