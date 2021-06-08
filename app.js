@@ -5,6 +5,7 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 
 require("dotenv").config();
+app.use(cors());
 
 mongoose.connect(
   process.env.MONGO_DB,
